@@ -12,13 +12,17 @@ class Appfigures
   end
 
   #https://api.appfigures.com/v2/reports/sales/?group_by=product&client_key=c0725e4c875b412fbca6b12b5db44a4e
-  def product_sales
+  def product_sales(product_id = nil)
     url = 'reports/sales'
     options = {group_by: 'product'}
 
+    unless product_id.nil?
+      options = options.merge({products: product_id})
+    end
+
     response = self.connection.get(url, options)
     response.body.map do |id, hash|
-      if response.status == 200 
+      if response.status == 200
         Hashie::Mash.new({
             'product_id'      => hash['product']['id'],
             'store_id'        => hash['product']['store_id'],
@@ -171,6 +175,21 @@ class Appfigures
         return Hashie::Mash.new
       end
     end.first
+  end
+
+  #https://api.appfigures.com/v2/products/(apple | google_play)/{STORE_ID}&client_key=c0725e4c875b412fbca6b12b5db44a4e
+  def product(store_id, options = {})
+    url = "products/#{if store_id.start_with?('com') then 'google_play' else 'apple' end}/#{store_id}"
+
+    response = self.connection.get(url, options)
+    if response.status == 200 
+      body = response.body
+      self.product_sales(body['id']).first
+    else
+      puts 'Appfigures service error:'
+      puts hash.to_json
+      Hashie::Mash.new
+    end
   end
 
 end
