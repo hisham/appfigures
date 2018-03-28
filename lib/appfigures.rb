@@ -42,7 +42,7 @@ class Appfigures
             'active'          => hash['product']['source']['active']
           })
       else
-        puts 'Appfigures service error:'
+        puts "Appfigures service error for #{url} #{options}:"
         puts hash.to_json
         Hashie::Mash.new
       end
@@ -77,7 +77,7 @@ class Appfigures
       end
     else
       response.body.map do |id, hash|
-        puts 'Appfigures service error:'
+        puts "Appfigures service error for #{url} #{options}: "
         puts hash.to_json
         Hashie::Mash.new
       end
@@ -108,7 +108,7 @@ class Appfigures
           'gift_redemptions' => hash['gift_redemptions'],
         })
       else
-        puts 'Appfigures service error:'
+        puts "Appfigures service error for #{url} #{options}: "
         puts hash.to_json
         Hashie::Mash.new
       end
@@ -145,7 +145,7 @@ class Appfigures
                                end
                 })
     else
-      puts 'Appfigures service error:'
+      puts "Appfigures service error for #{url} #{options}: "
       puts response.body.to_json
       return Hashie::Mash.new
     end
@@ -170,7 +170,7 @@ class Appfigures
             'product' => product['product']
         })
       else
-        puts 'Appfigures service error:'
+        puts "Appfigures service error for #{url} #{options}: "
         puts hash.to_json
         return Hashie::Mash.new
       end
@@ -186,7 +186,7 @@ class Appfigures
       body = response.body
       self.product_sales(body['id']).first
     else
-      puts 'Appfigures service error:'
+      puts "Appfigures service error for #{url} #{options}: "
       puts hash.to_json
       Hashie::Mash.new
     end
